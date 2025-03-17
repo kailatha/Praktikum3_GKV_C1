@@ -1,0 +1,50 @@
+1. Inisialisasi (init)
+Fungsi init(void) mengatur latar belakang jendela tampilan menjadi hitam (glClearColor(0.0, 0.0, 0.0, 0.0)) dan menggunakan model shading flat (glShadeModel(GL_FLAT)).
+
+2. Tampilan (display)
+Fungsi display(void) menggambar model lengan dengan dua bagian utama:
+
+Bahu (shoulder) yang bisa berputar
+Siku (elbow) yang juga bisa berputar
+Detail Proses Rendering
+Membersihkan buffer warna (glClear(GL_COLOR_BUFFER_BIT)).
+
+Transformasi untuk bahu:
+
+Menggeser ke posisi awal (glTranslatef(-1.0, 0.0, 0.0)).
+Memutar bahu berdasarkan variabel shoulder (glRotatef((GLfloat) shoulder, 0.0, 0.0, 1.0)).
+Menggeser titik referensi (glTranslatef(1.0, 0.0, 0.0)).
+Menskalakan dan menggambar kubus untuk merepresentasikan bagian atas lengan (glScalef(2.0, 0.4, 1.0), glutWireCube(1.0)).
+Transformasi untuk siku:
+
+Menggeser ke ujung bahu (glTranslatef(1.0, 0.0, 0.0)).
+Memutar siku berdasarkan variabel elbow (glRotatef((GLfloat) elbow, 0.0, 0.0, 1.0)).
+Menggeser titik referensi (glTranslatef(1.0, 0.0, 0.0)).
+Menskalakan dan menggambar kubus untuk bagian bawah lengan (glScalef(2.0, 0.4, 1.0), glutWireCube(1.0)).
+Menampilkan hasil menggunakan glutSwapBuffers().
+
+3. Resize Window (reshape)
+Fungsi reshape(int w, int h) menangani perubahan ukuran jendela:
+
+Mengatur viewport (glViewport(0, 0, (GLsizei) w, (GLsizei) h)).
+Mengatur mode proyeksi perspektif (gluPerspective(65.0, (GLfloat) w / (GLfloat) h, 1.0, 20.0)).
+Mengatur transformasi tampilan (glTranslatef(0.0, 0.0, -5.0)).
+4. Interaksi Keyboard
+Fungsi keyboard(unsigned char key, int x, int y) menangani input pengguna untuk menggerakkan bahu dan siku:
+
+'s' → Memutar bahu searah jarum jam (shoulder = (shoulder + 5) % 360).
+'S' → Memutar bahu berlawanan jarum jam (shoulder = (shoulder - 5) % 360).
+'e' → Memutar siku searah jarum jam (elbow = (elbow + 5) % 360).
+'E' → Memutar siku berlawanan jarum jam (elbow = (elbow - 5) % 360).
+27 (Escape key) → Keluar dari program (exit(0)).
+Setiap kali tombol ditekan, glutPostRedisplay() dipanggil untuk menggambar ulang objek.
+
+5. Fungsi Utama (main)
+Fungsi main(int argc, char** argv) menginisialisasi GLUT dan menjalankan loop utama:
+
+Inisialisasi GLUT (glutInit()).
+Mengatur mode tampilan double buffer dan RGB (glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)).
+Mengatur ukuran dan posisi jendela (glutInitWindowSize(700, 600), glutInitWindowPosition(100, 100)).
+Membuat jendela (glutCreateWindow(argv[0])).
+Memanggil fungsi init(), glutDisplayFunc(display), glutReshapeFunc(reshape), dan glutKeyboardFunc(keyboard).
+Menjalankan loop GLUT (glutMainLoop()).
